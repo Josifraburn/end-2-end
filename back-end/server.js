@@ -11,9 +11,40 @@ server.route({
     method: 'GET',
     path:'/', 
     handler: (request, h) => {
-        return 'hello world from josifs computer';
+        return { message: 'hello world' };
+    },
+    config: {
+        cors: {
+            origin: ['*'],
+            additionalHeaders: ['cache-control', 'x-requested-width']
+        }
     }
 });
+
+server.route({
+    method: 'GET',
+    path:'/cars', 
+    handler: (request, h) => {
+        return { cars: [{
+            make: 'BMW',
+            model: 'M3',
+            year: '2000',
+            mileage: '100000'
+        },{
+            make: 'BMW',
+            model: 'X3',
+            year: '2004',
+            mileage: '80000'
+        }]};
+    },
+    config: {
+        cors: {
+            origin: ['*'],
+            additionalHeaders: ['cache-control', 'x-requested-width']
+        }
+    }
+});
+
 
 async function start() {
 

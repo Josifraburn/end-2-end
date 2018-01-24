@@ -3,16 +3,46 @@ import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+state = {
+  cars: []
+}
+
+  getData = async (path) => {
+    const url = `http://localhost:3001${path}`
+    const response = await fetch(url)
+    const data = await response.json()
+    console.log(data)    
+    return data
+  }
+
+
+  displayCars = (cars) => {
+    const carElements = [];
+    for (const car of cars) {
+      carElements.push(
+        <div>
+          <h1>{car.make}</h1>
+          <h2>{car.model}</h2>
+          <h3>{car.year}</h3>
+          <h4>{car.mileage}</h4>
+        </div>
+      )
+    }
+    return carElements
+  }
+
+  async componentDidMount() {
+   const carsResponse = await this.getData('/cars')
+   console.log(carsResponse)
+   this.setState({ cars: carsResponse.cars })
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <h1>
+          {this.displayCars(this.state.cars)}
+        </h1>
       </div>
     );
   }
