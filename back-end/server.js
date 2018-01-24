@@ -28,13 +28,13 @@ server.route({
         return { cars: [{
             make: 'BMW',
             model: 'M3',
-            year: '2000',
-            mileage: '100000'
+            year: 2000,
+            mileage: 100000
         },{
             make: 'BMW',
             model: 'X3',
-            year: '2004',
-            mileage: '80000'
+            year: 2004,
+            mileage: 80000
         }]};
     },
     config: {
@@ -44,6 +44,15 @@ server.route({
         }
     }
 });
+
+server.route({
+    method: 'POST',
+    path:'/cars',
+    handler: (request, h) => {
+        console.log(request.payload)
+        return h.response('success')
+    }
+})
 
 
 async function start() {
