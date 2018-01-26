@@ -2,10 +2,22 @@
 
 const Hapi = require('hapi');
 
+const Monk = require('monk');
+
 const server = Hapi.server({ 
     host: 'localhost', 
     port: 3001
 });
+
+
+
+
+const getCarsCollection = async () => {
+    const connectionString = 'mongodb://admin:password@ds115768.mlab.com:15768/dealership'
+    const db = Monk(connectionString)
+    const cars = await db.get('cars')
+    return cars
+}
 
 server.route({
     method: 'GET',
@@ -24,18 +36,10 @@ server.route({
 server.route({
     method: 'GET',
     path:'/cars', 
-    handler: (request, h) => {
-        return { cars: [{
-            make: 'BMW',
-            model: 'M3',
-            year: 2000,
-            mileage: 100000
-        },{
-            make: 'BMW',
-            model: 'X3',
-            year: 2004,
-            mileage: 80000
-        }]};
+    handler: async (request, h) => {
+        const carsCollection = await getCarsCollection()
+        const cars = await carsCollection.find()
+        return { cars }
     },
     config: {
         cors: {
@@ -48,10 +52,19 @@ server.route({
 server.route({
     method: 'POST',
     path:'/cars',
-    handler: (request, h) => {
+    handler: async (request, h) => {
+        const cars = await getCarsCollection()
+        cars.insert(request.payload)
         console.log(request.payload)
-        return h.response('success')
+        return h.response()
+    },
+    config: {
+        cors: {
+            origin: ['*'],
+            additionalHeaders: ['cache-control', 'x-requested-width']
+        }
     }
+
 })
 
 
