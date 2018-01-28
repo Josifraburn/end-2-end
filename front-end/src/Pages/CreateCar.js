@@ -26,7 +26,25 @@ class CreateCar extends Component {
         }
     }
     
-    onClickHandler = () => {
+
+
+    async postData(path, data) {
+        const url = `http://localhost:3001${path}`
+        const response = await fetch(url, {
+            method: 'POST',
+            mode: 'CORS',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        console.log(response)
+        return response
+    }
+
+
+    onClickHandler = async () => {
+        await this.postData('/cars', this.state)
         //TODO: POST TO API
         console.log("SHOULD POST:", this.state)
     }
