@@ -19,6 +19,7 @@ class App extends Component {
               </nav>
               <Route exact path='/' component = {Home} />
               <Route path='/createcar' component = {CreateCar} />
+              <h1>HELLO</h1>
             </div>
           </Router>
         </h1>
